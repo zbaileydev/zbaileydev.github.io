@@ -1,5 +1,3 @@
-# puzzlezach.github.io
-
 ## Welcome to my portfolio.
 
 This is a compiliation of projects I have worked on over the last few years and breakdowns for each one.
