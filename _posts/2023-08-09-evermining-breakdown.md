@@ -20,7 +20,7 @@ Any gems will be automatically picked up if the player gets close enough to them
 
 ## [Character Movement](#character)
 
-For the character, I wanted something squishy that was fun to move around with, so I downloaded a sprite knight from [Kenney](https://kenney.nl/assets/tiny-dungeon) and placed it into my scene. After the initial controller was set up, I worked on creating a squishing effect when the player jumped and a slight tilt towards whichever direction they were running. We'll go over the key sections of this script.
+For the character, I wanted something squishy that was fun to move around with, so I downloaded a sprite knight from [Kenney](https://kenney.nl/assets/tiny-dungeon) and placed it into my scene. After the initial controller was set up, I worked on creating a squishing effect when the player jumped and a slight tilt towards whichever direction they were running. We'll go over the key sections of the helper script called by our main movement controller.
 
 ```c#
   public GameObject playerSprite;
@@ -36,62 +36,55 @@ Our initial variables are what you might expect; a GameObject referencing our kn
 
 
 ```c#
+void Update(){
+    if (shouldRotate) {SquishRun();}
+    else {ResetRotation();}
+} 
 
-    void Update(){
-        // If our inputX is not 0, we lerp between 0 and -10 on the Z axis 
-        // Otherwise rotation will be reset.
-        if (shouldRotate) {SquishRun();}
-        else {ResetRotation();}
+public void SquishRun(){
+    Quaternion fromRot = Quaternion.Euler(m_from);
+    Quaternion toRot = Quaternion.Euler(m_to);
+    float lerp = 0.5f * (1.0f + Mathf.Sin(Mathf.PI * Time.realtimeSinceStartup * rotSpeed));
+    playerSprite.transform.localRotation = Quaternion.Lerp(fromRot, toRot, lerp);
+}
 
-    }
-
-    public void UpdateRotate(bool rot){
-        shouldRotate = rot;
-    }
-
-    // Warp the scale of the sprite when jumping
-    public void JumpPlayer(float x, float y){
-        playerSprite.transform.localScale = new Vector2(x, y);
-    }
-
-    // Move the player direction to flip all child objects
-    // including the sprite and rotation targets
-    public void FlipPlayer(GameObject target, float x, float y){
-        // Changed from playerSPrite to target.....
-        target.transform.localScale = new Vector2(x, y);
-    }
-
-    public void RotateHammer(GameObject target, float direction){
-        // Rotate to -80 on Z
-        // Make sure we only do this once!
-        if (direction == 1f)
-        {
-            target.transform.localRotation = Quaternion.identity;
-            hammerRotated = false;
-        }
-        else if(!hammerRotated)
-        {
-            target.transform.Rotate(0f, 0f, 80f, Space.World);
-            hammerRotated = true;
-        }
-
-    }
-
-    public void SquishRun(){
-        // Transform the start transform's vector3 position into Euler angles
-        Quaternion fromRot = Quaternion.Euler(m_from);
-        Quaternion toRot = Quaternion.Euler(m_to);
-
-        float lerp = 0.5f * (1.0f + Mathf.Sin(Mathf.PI * Time.realtimeSinceStartup * rotSpeed));
-        playerSprite.transform.localRotation = Quaternion.Lerp(fromRot, toRot, lerp);
-    }
+void ResetRotation(){
+      playerSprite.transform.localRotation = Quaternion.identity;
+  }
+```
+In the Update() call, we check if should be rotating our character. Since this is initialized to false, ResetRotation() is called to ensure we start off with no rotation. If we are able to rotate, SquishRun is called which transforms the V3 into euler angles and passes them into a lerp between 0 and -10 on the Z axis. The sprite then bounces back and forth between these positions as the player moves.
 
 
-    void ResetRotation(){
-        playerSprite.transform.localRotation = Quaternion.identity;
-    }
+```c#
+public void FlipPlayer(GameObject target, float x, float y){
+    target.transform.localScale = new Vector2(x, y);
+}
+
+public void JumpPlayer(float x, float y){
+    playerSprite.transform.localScale = new Vector2(x, y);
 }
 ```
+The fun part is how we handle the player turning. We just flip the player and all its children, meaning SquishRun does not need to be modifed. We also warp the scale of the player when they are jumped, creating a stretching effect along with the side-to-side bob.
+
+
+```c#
+public void RotateHammer(GameObject target, float direction){
+    if (direction == 1f){
+        target.transform.localRotation = Quaternion.identity;
+        hammerRotated = false;
+    }
+    else if(!hammerRotated){
+        target.transform.Rotate(0f, 0f, 80f, Space.World);
+        hammerRotated = true;
+    }
+}
+
+public void UpdateRotate(bool rot){
+    shouldRotate = rot;
+}
+
+```
+The final functions in our helper class rotate the mining hammer, which is called not for swinging the hammer, but for rotating the hammer when the sprite changes direction on the X axis so it is always facing the right direction. There is also a helper function to update our shouldRotate bool. 
 
 
 
