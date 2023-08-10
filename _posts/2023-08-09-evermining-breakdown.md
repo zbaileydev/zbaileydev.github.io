@@ -336,7 +336,7 @@ We are keeping track of variables for the range we can mine from, references to 
   
 <summary>Mining Update Call</summary>
 
-```
+```c#
   void Update(){
     if (Input.GetKeyDown(KeyCode.Space))
     {
