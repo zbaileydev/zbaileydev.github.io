@@ -21,6 +21,9 @@ Any gems will be automatically picked up if the player gets close enough to them
 ## [Player Movement](#player-movement)
 
 For the character, I wanted something squishy that was fun to move around with, so I downloaded a sprite knight from [Kenney](https://kenney.nl/assets/tiny-dungeon) and placed it into my scene. After the initial controller was set up, I worked on creating a squishing effect when the player jumped and a slight tilt towards whichever direction they were running. We'll go over the key sections of the helper script called by our main movement controller.
+<details>
+
+<summary>Player Movement Variables</summary>
 
 ```c#
   public GameObject playerSprite;
@@ -32,6 +35,7 @@ For the character, I wanted something squishy that was fun to move around with, 
   Vector3 m_to = new Vector3(0.0F, 0.0F, -10.0F);
   bool hammerRotated = false;
 ```
+</details>
 Our initial variables are what you might expect; a GameObject referencing our knight, a speed for how fast to rotate it, a bool to keep track of whether we are able to rotate, Transforms of the rotations start and end location, and 2 Vector3's which represent the Z direction that the knight tilts towards.
 
 
