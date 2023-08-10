@@ -4,10 +4,10 @@ layout: post
 
 This is a breakdown of systems I designed for Evermining, a minining simulator submitted to "My First Game Jam: Summer 2022".
 
-## Table of contents
-- [Table of contents](#table-of-contents)
+## [Table of contents](#contents)
 - [Plan](#plan)
 - [Character Movement](#character)
+- [Character Controller](#controller)
 - [Mining](#mining)
 - [UI](#UI)
 
@@ -36,59 +36,92 @@ Our initial variables are what you might expect; a GameObject referencing our kn
 
 
 ```c#
-void Update(){
-    if (shouldRotate) {SquishRun();}
-    else {ResetRotation();}
-} 
-
-public void SquishRun(){
-    Quaternion fromRot = Quaternion.Euler(m_from);
-    Quaternion toRot = Quaternion.Euler(m_to);
-    float lerp = 0.5f * (1.0f + Mathf.Sin(Mathf.PI * Time.realtimeSinceStartup * rotSpeed));
-    playerSprite.transform.localRotation = Quaternion.Lerp(fromRot, toRot, lerp);
-}
-
-void ResetRotation(){
-      playerSprite.transform.localRotation = Quaternion.identity;
+  void Update(){
+      if (shouldRotate) {SquishRun();}
+      else {ResetRotation();}
+  } 
+  
+  public void SquishRun(){
+      Quaternion fromRot = Quaternion.Euler(m_from);
+      Quaternion toRot = Quaternion.Euler(m_to);
+      float lerp = 0.5f * (1.0f + Mathf.Sin(Mathf.PI * Time.realtimeSinceStartup * rotSpeed));
+      playerSprite.transform.localRotation = Quaternion.Lerp(fromRot, toRot, lerp);
   }
+  
+  void ResetRotation(){
+        playerSprite.transform.localRotation = Quaternion.identity;
+    }
 ```
 In the Update() call, we check if should be rotating our character. Since this is initialized to false, ResetRotation() is called to ensure we start off with no rotation. If we are able to rotate, SquishRun is called which transforms the V3 into euler angles and passes them into a lerp between 0 and -10 on the Z axis. The sprite then bounces back and forth between these positions as the player moves.
 
 
 ```c#
-public void FlipPlayer(GameObject target, float x, float y){
-    target.transform.localScale = new Vector2(x, y);
-}
-
-public void JumpPlayer(float x, float y){
-    playerSprite.transform.localScale = new Vector2(x, y);
-}
+  public void FlipPlayer(GameObject target, float x, float y){
+      target.transform.localScale = new Vector2(x, y);
+  }
+  
+  public void JumpPlayer(float x, float y){
+      playerSprite.transform.localScale = new Vector2(x, y);
+  }
 ```
 The fun part is how we handle the player turning. We just flip the player and all its children, meaning SquishRun does not need to be modifed. We also warp the scale of the player when they are jumped, creating a stretching effect along with the side-to-side bob.
 
 
 ```c#
-public void RotateHammer(GameObject target, float direction){
-    if (direction == 1f){
-        target.transform.localRotation = Quaternion.identity;
-        hammerRotated = false;
-    }
-    else if(!hammerRotated){
-        target.transform.Rotate(0f, 0f, 80f, Space.World);
-        hammerRotated = true;
-    }
-}
-
-public void UpdateRotate(bool rot){
-    shouldRotate = rot;
-}
-
+  public void RotateHammer(GameObject target, float direction){
+      if (direction == 1f){
+          target.transform.localRotation = Quaternion.identity;
+          hammerRotated = false;
+      }
+      else if(!hammerRotated){
+          target.transform.Rotate(0f, 0f, 80f, Space.World);
+          hammerRotated = true;
+      }
+  }
+  
+  public void UpdateRotate(bool rot){
+      shouldRotate = rot;
+  }
 ```
 The final functions in our helper class rotate the mining hammer, which is called not for swinging the hammer, but for rotating the hammer when the sprite changes direction on the X axis so it is always facing the right direction. There is also a helper function to update our shouldRotate bool. 
 
+[Back to Top](#contents)
 
+## [Character Controller](#controller)
+
+Now that we have covered our helper script to enhance the player's movement, let's explore how this is called by the actual controller. 
+
+```c#
+  public AudioSource steps;
+  public AudioSource music;
+  
+  public float speed = 10f;
+  public float jumpThrust = 15f;
+  public GameObject hammer;
+  
+  bool isGrounded = true;
+  bool stepSounds = false;
+  
+  PlayerGraphics playerGraphics;
+  Rigidbody2D rb;
+
+  void Start(){
+      rb = GetComponent<Rigidbody2D>();
+      playerGraphics = GetComponent<PlayerGraphics>();
+      music.Play();
+  }
+```
+Our variables are sound effects for steps and music, some public floats for the speed, a reference to the hammer, and bools for tracking our state. We also have a PlayerGraphics reference which connects our helper script to this one. The start function also does what you would expect; assigning our components to variables and starting the music. Ideally music would play from a GameManager, but this prototype does not have one.
+
+```c#
+
+
+```
+[Back to Top](#contents)
 
 ## [Mining](#mining)
+
+[Back to Top](#contents)
 
 ## [UI](#UI)
 
