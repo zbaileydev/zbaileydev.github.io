@@ -49,3 +49,8 @@ sass:
 plugins:
   - jekyll-feed
   - jekyll-soopr-seo-tag
+
+markdown: CommonMarkGhPages
+commonmark:
+  options: ["SMART", "FOOTNOTES"]
+  extensions: ["strikethrough", "autolink", "tables"]
