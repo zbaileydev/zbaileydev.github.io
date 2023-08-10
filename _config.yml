@@ -48,7 +48,5 @@ plugins:
   - jekyll-feed
   - jekyll-soopr-seo-tag
 
-markdown: kramdown
+markdown: CommonMarkGhPages
 highlighter: rouge
-kramdown:
-  parse_block_html: true
