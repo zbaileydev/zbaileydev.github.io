@@ -114,9 +114,69 @@ Now that we have covered our helper script to enhance the player's movement, let
 Our variables are sound effects for steps and music, some public floats for the speed, a reference to the hammer, and bools for tracking our state. We also have a PlayerGraphics reference which connects our helper script to this one. The start function also does what you would expect; assigning our components to variables and starting the music. Ideally music would play from a GameManager, but this prototype does not have one.
 
 ```c#
+ void Update(){
+    if (Input.GetKeyDown(KeyCode.P)) Application.Quit();
+    
+    if (rb.velocity.y == 0){
+        isGrounded = true;
+        playerGraphics.JumpPlayer(1f, 1f);
+    }
 
+    if (Input.GetKeyDown(KeyCode.W) && isGrounded){
+        float stetchHeight = 1.10f;
+        float stetchWidth = 0.90f;
+        playerGraphics.JumpPlayer(stetchWidth, stetchHeight);
+        HandleJump();
+        isGrounded = false;
+    }
+    MoveHorizontal();
+  }
 
+  void HandleJump(){
+      rb.AddForce(transform.up * jumpThrust, ForceMode2D.Impulse);
+  }
+
+  void OnCollisionEnter2D(Collision2D other){
+    if (other.gameObject.tag == "Floor" && !isGrounded) isGrounded = true;
+    }
 ```
+In our core game loop, the first condition we check for is if the P key is pressed leading the game to quit. We then check the RigidBody's velocity in the Y axis to see if we are jumping. If we are not in the air, we ensure our sprite's localScale is set to a float of 1. Otherwise if we are on the ground and press the W key, we then initiate a jump which stretches the sprite vertically. The jump just adds force in the Y direction.
+
+Finally, just in case our knight is touching the floor but the isGrounded flag has not reset itself, we force the flag back to enable jumping. The next section is going to cover the MoveHorizontal() function.
+
+```c#
+void MoveHorizontal(){
+    float inputX = Input.GetAxis("Horizontal");
+    Vector3 movement = new Vector3(speed * inputX, 0, 0);
+    movement *= Time.deltaTime;
+    transform.Translate(movement);
+
+    if (inputX != 0 && !stepSounds)
+    {
+        steps.Play();
+        stepSounds = true;
+    }
+
+    if (inputX < 0){
+        playerGraphics.FlipPlayer(this.gameObject, -1f, 1f);
+        playerGraphics.FlipPlayer(hammer, -1f, 1f);
+        playerGraphics.RotateHammer(hammer, -1f);
+        playerGraphics.UpdateRotate(true);
+    }
+    else if (inputX > 0){
+        playerGraphics.FlipPlayer(this.gameObject, 1f, 1f);
+        playerGraphics.FlipPlayer(hammer, 1f, 1f);
+        playerGraphics.RotateHammer(hammer, 1f);
+        playerGraphics.UpdateRotate(true);
+    }
+    else if (inputX == 0){
+        playerGraphics.UpdateRotate(false);
+        steps.Stop();
+        stepSounds = false;
+    }
+```
+Each frame we grab our X-axis input and translate it into movement based on how long it has been since the last frame. SFX plays for the walk noise if stepSounds is false. The largest part of this function is calling functions to flip the player and the hammer they wield. If we are moving to the left, our inputX is going to be less than 0 which is what the first condition is checking for. We call FlipPlayer on the gameobject itself and the hammer, then we rotate the hammer and update the bool tracking that it has rotated. If we are not moving then the step SFX stops and we stop tilting the sprite. 
+
 [Back to Top](#contents)
 
 ## [Mining](#mining)
@@ -125,3 +185,4 @@ Our variables are sound effects for steps and music, some public floats for the 
 
 ## [UI](#ui)
 
+[Back to Top](#contents)
