@@ -41,8 +41,6 @@ theme_config:
 soopr:
   publish_token: "" # sign up at https://www.soopr.co to get your publish token and personalize share and reaction options
 
-highlighter: rouge
-
 sass:
   style: :compressed
 
@@ -51,5 +49,6 @@ plugins:
   - jekyll-soopr-seo-tag
 
 markdown: kramdown
+highlighter: rouge
 kramdown:
   parse_block_html: true
