@@ -14,7 +14,7 @@ This is a breakdown of systems I designed for Evermining, a minining simulator s
 
 ## [Plan](#plan)
 
-Evermining was planned out as a 2D mining game that would follow the jam's theme of "healing" by letting you harvest gems which you could combine together for spells such as healing yourself or others. My development time was cut short by a week because I was sick so I pivoted to a MVP of having a mining loop where rocks spawn in and the player harvests them. The control set relies on the player using the WASD keys to move around the level and using the left mouse button to swing their pickaxe. 
+Evermining was planned out as a 2D mining game that would follow the jam's theme of "healing" by letting you harvest gems which you could combine together for spells such as healing yourself or others. My development time was cut short by a week because I was sick so I pivoted to a MVP of having a mining loop where rocks spawn in and the player harvests them. The control set relies on the player using the WASD keys to move around the level and pressing the space button to swing their pickaxe. 
 
 Any gems will be automatically picked up if the player gets close enough to them and once they reach 20 of each type they will win the game. There is also a quit key "P" which allow the player to quit the game. 
 
@@ -180,6 +180,128 @@ Each frame we grab our X-axis input and translate it into movement based on how 
 [Back to Top](#contents)
 
 ## [Mining](#mining)
+
+Now that we understand how our knight runs around, it's time to dive into the actual mining system. We have 3 scripts to explore here: GemSpawner, Mining, Spawner. We will start with Spawner which is attached to rocks that spawn in the map.
+
+```c#
+  public string gemType = "";
+  public int health = 3;
+  public GameObject gems;
+
+  void Update(){
+    if(health <= 0){
+      Instantiate(gems, transform.position, Quaternion.identity);
+      Destroy(this.gameObject);
+    }
+  }
+
+  public void TakeDamage(){
+    health -= 1;
+  }
+
+```
+The gemType is set in the prefrab itself, we will elaborate on that later. A public health variable and corresponding gem object is available to be attached to. If at any point the health of the rock drops below 0, it will instantate gems at its location and destroy itself. There is also a function to take damage which just decrements its health.
+
+Next up is GemSpawner.
+
+```c#
+  public GameObject gem1;
+  public GameObject gem2;
+  public GameObject gem3;
+  public GameObject gem4;
+  public float spawnCooldown = 0.5f;
+  float timeSinceSpawn = 0f;
+  List <GameObject> rocks = new List<GameObject>();
+
+  void Start(){
+      rocks.Add(gem1);
+      rocks.Add(gem2);
+      rocks.Add(gem3);
+      rocks.Add(gem4);
+  }
+  void Update(){
+      if (timeSinceSpawn > spawnCooldown){
+          int choice = Random.Range(0, rocks.Count);
+          AddGems(rocks[choice]);
+          timeSinceSpawn = 0;
+      }
+      else{
+          timeSinceSpawn += Time.deltaTime;
+      }
+  }
+
+  void AddGems(GameObject gemRock){
+      float xLoc = Random.Range(-8f, 8);
+      Vector3 spawnLocation = transform.position;
+      spawnLocation.x = xLoc;
+      Instantiate(gemRock, spawnLocation, Quaternion.identity);
+  }
+```
+There are 4 types of Gems that the player can mine, which is why we have 4 different game objects. "spawnCooldown" controls how long it will take until a rock is spawned into the map. If the time since a rock has spawned in passes the spawnCooldown, a random rock is chosen and spawned it somewhere in the map between -8 and 8 on the X-axis. 
+
+Finally we look at the mining component that ties these rocks to the player.
+
+```c#
+  public float mineRange = 1.5f;
+  public GameObject hammer;
+  public AudioSource hammerStrike;
+  public AudioSource gemPickups;
+  public float collectRadius = 2f;
+  public Image pickaxeOverlay;
+
+  Inventory inventory;
+  Spawner rock;
+  bool ableToMine = false;
+  
+  Color originalColor;
+  float flashTime = 0.1f;
+
+  void Start(){
+    inventory = GetComponent<Inventory>();
+    originalColor = pickaxeOverlay.color;
+  }
+```
+We are keeping track of variables for the range we can mine from, references to the hammer and audio, a radius to collect gems from, and other object references needed to interact with the UI such as changing the color of the mining icon when it is mining. 
+
+```
+  void Update(){
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+      float direction = transform.localScale.x;
+      Vector2 mineTarget = new Vector2((direction * mineRange) + transform.position.x, transform.position.y);
+      RaycastHit2D hit = Physics2D.Raycast(mineTarget, Vector2.zero);
+
+      if (hit.collider != null){
+        Mine(hit.collider.gameObject.GetComponent<Spawner>());
+      }
+    }
+
+    Vector2 point = new Vector2(transform.position.x, transform.position.y);
+    Collider2D[] hitColliders = Physics2D.OverlapCircleAll(point, collectRadius);
+    foreach (var hitCollider in hitColliders){
+      if(hitCollider.gameObject.name.Contains("GemRock")){
+          CollectGems(hitCollider);
+      }
+    }
+  }
+
+```
+If the space key is pressed down, a Vector2 is created at the distance in front of the player + the mining range and a raycast is fired off to it. When a rock is within distance, its Spawner component will be saved and passed into the Mine() function which we will elaborate on later. Finally in the Update, a 2D circle is created around the player to identify any loose gems in their poximity and for each one found, a CollectGems function is called on it. This function is prone to collecting duplicates, so one fix is to track the object in an array and only call CollectGems if the object is not in the array. That's what I recently used in a Godot game when a resize Tween caused coins to collect twice because it triggered 2 collisions, but I will test this out when I port the game to Unreal Engine and Blueprints. 
+
+```c#
+  void Mine(Spawner rock)
+    {
+      if (rock != null){ 
+          StartCoroutine(ChangeColor());
+          rock.TakeDamage();
+          hammerStrike.Play();
+      }
+    }
+
+```
+
+
+
 
 [Back to Top](#contents)
 
