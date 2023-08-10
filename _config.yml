@@ -50,3 +50,6 @@ plugins:
 
 markdown: CommonMarkGhPages
 highlighter: rouge
+commonmark:
+  options: ["UNSAFE", "SMART", "FOOTNOTES"]
+  extensions: ["strikethrough", "autolink", "table", "tagfilter"]
