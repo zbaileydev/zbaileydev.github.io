@@ -21,9 +21,10 @@ Any gems will be automatically picked up if the player gets close enough to them
 ## [Player Movement](#player-movement)
 
 For the character, I wanted something squishy that was fun to move around with, so I downloaded a sprite knight from [Kenney](https://kenney.nl/assets/tiny-dungeon) and placed it into my scene. After the initial controller was set up, I worked on creating a squishing effect when the player jumped and a slight tilt towards whichever direction they were running. We'll go over the key sections of the helper script called by our main movement controller.
-<details>
 
-<summary>Player Movement Variables</summary>
+<details>
+  
+<summary>PlayerGraphics Variables</summary>
 
 ```c#
   public GameObject playerSprite;
@@ -38,7 +39,10 @@ For the character, I wanted something squishy that was fun to move around with, 
 </details>
 Our initial variables are what you might expect; a GameObject referencing our knight, a speed for how fast to rotate it, a bool to keep track of whether we are able to rotate, Transforms of the rotations start and end location, and 2 Vector3's which represent the Z direction that the knight tilts towards.
 
-
+<details>
+  
+<summary>PlayerGraphics Update, SquishRun, and ResetRotation</summary>
+  
 ```c#
   void Update(){
       if (shouldRotate) {SquishRun();}
@@ -56,8 +60,14 @@ Our initial variables are what you might expect; a GameObject referencing our kn
         playerSprite.transform.localRotation = Quaternion.identity;
     }
 ```
+</details>
+
 In the Update() call, we check if should be rotating our character. Since this is initialized to false, ResetRotation() is called to ensure we start off with no rotation. If we are able to rotate, SquishRun is called which transforms the V3 into euler angles and passes them into a lerp between 0 and -10 on the Z axis. The sprite then bounces back and forth between these positions as the player moves.
 
+
+<details>
+  
+<summary>PlayerGraphics FlipPlayer and JumpPlayer</summary>
 
 ```c#
   public void FlipPlayer(GameObject target, float x, float y){
@@ -68,8 +78,15 @@ In the Update() call, we check if should be rotating our character. Since this i
       playerSprite.transform.localScale = new Vector2(x, y);
   }
 ```
+
+</details>
+
 The fun part is how we handle the player turning. We just flip the player and all its children, meaning SquishRun does not need to be modifed. We also warp the scale of the player when they are jumped, creating a stretching effect along with the side-to-side bob.
 
+
+<details>
+  
+<summary>PlayerGraphics RotateHammer and UpdateRotate</summary>
 
 ```c#
   public void RotateHammer(GameObject target, float direction){
@@ -87,6 +104,9 @@ The fun part is how we handle the player turning. We just flip the player and al
       shouldRotate = rot;
   }
 ```
+
+</details>
+
 The final functions in our helper class rotate the mining hammer, which is called not for swinging the hammer, but for rotating the hammer when the sprite changes direction on the X axis so it is always facing the right direction. There is also a helper function to update our shouldRotate bool. 
 
 [Back to Top](#contents)
@@ -94,6 +114,10 @@ The final functions in our helper class rotate the mining hammer, which is calle
 ## [Controller](#controller)
 
 Now that we have covered our helper script to enhance the player's movement, let's explore how this is called by the actual controller. 
+
+<details>
+  
+<summary>Player Movement Initialization</summary>
 
 ```c#
   public AudioSource steps;
@@ -115,7 +139,14 @@ Now that we have covered our helper script to enhance the player's movement, let
       music.Play();
   }
 ```
+
+</details>
+
 Our variables are sound effects for steps and music, some public floats for the speed, a reference to the hammer, and bools for tracking our state. We also have a PlayerGraphics reference which connects our helper script to this one. The start function also does what you would expect; assigning our components to variables and starting the music. Ideally music would play from a GameManager, but this prototype does not have one.
+
+<details>
+  
+<summary>Player Movement Update, HandleJump, and collision handling.</summary>
 
 ```c#
  void Update(){
@@ -144,9 +175,16 @@ Our variables are sound effects for steps and music, some public floats for the 
     if (other.gameObject.tag == "Floor" && !isGrounded) isGrounded = true;
     }
 ```
+
+</details>
+
 In our core game loop, the first condition we check for is if the P key is pressed leading the game to quit. We then check the RigidBody's velocity in the Y axis to see if we are jumping. If we are not in the air, we ensure our sprite's localScale is set to a float of 1. Otherwise if we are on the ground and press the W key, we then initiate a jump which stretches the sprite vertically. The jump just adds force in the Y direction.
 
 Finally, just in case our knight is touching the floor but the isGrounded flag has not reset itself, we force the flag back to enable jumping. The next section is going to cover the MoveHorizontal() function.
+
+<details>
+  
+<summary>Player Movement MoveHorizontal</summary>
 
 ```c#
 void MoveHorizontal(){
@@ -179,6 +217,9 @@ void MoveHorizontal(){
         stepSounds = false;
     }
 ```
+
+</details>
+
 Each frame we grab our X-axis input and translate it into movement based on how long it has been since the last frame. SFX plays for the walk noise if stepSounds is false. The largest part of this function is calling functions to flip the player and the hammer they wield. If we are moving to the left, our inputX is going to be less than 0 which is what the first condition is checking for. We call FlipPlayer on the gameobject itself and the hammer, then we rotate the hammer and update the bool tracking that it has rotated. If we are not moving then the step SFX stops and we stop tilting the sprite. 
 
 [Back to Top](#contents)
