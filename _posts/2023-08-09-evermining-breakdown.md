@@ -4,10 +4,10 @@ layout: post
 
 This is a breakdown of systems I designed for Evermining, a minining simulator submitted to "My First Game Jam: Summer 2022".
 
-## [Table of contents](#contents)
+## [Contents]
 - [Plan](#plan)
-- [Character Movement](#character)
-- [Character Controller](#controller)
+- [Movement](#movement)
+- [Controller](#controller)
 - [Mining](#mining)
 - [UI](#UI)
 
@@ -18,7 +18,7 @@ Evermining was planned out as a 2D mining game that would follow the jam's theme
 
 Any gems will be automatically picked up if the player gets close enough to them and once they reach 20 of each type they will win the game. There is also a quit key "P" which allow the player to quit the game. 
 
-## [Character Movement](#character)
+## [Movement](#movement)
 
 For the character, I wanted something squishy that was fun to move around with, so I downloaded a sprite knight from [Kenney](https://kenney.nl/assets/tiny-dungeon) and placed it into my scene. After the initial controller was set up, I worked on creating a squishing effect when the player jumped and a slight tilt towards whichever direction they were running. We'll go over the key sections of the helper script called by our main movement controller.
 
@@ -87,7 +87,7 @@ The final functions in our helper class rotate the mining hammer, which is calle
 
 [Back to Top](#contents)
 
-## [Character Controller](#controller)
+## [Controller](#controller)
 
 Now that we have covered our helper script to enhance the player's movement, let's explore how this is called by the actual controller. 
 
