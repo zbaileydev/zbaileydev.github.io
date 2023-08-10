@@ -4,12 +4,12 @@ layout: post
 
 This is a breakdown of systems I designed for Evermining, a minining simulator submitted to "My First Game Jam: Summer 2022".
 
-## [Contents]
+## [Contents](#contents)
 - [Plan](#plan)
 - [Movement](#movement)
 - [Controller](#controller)
 - [Mining](#mining)
-- [UI](#UI)
+- [UI](#ui)
 
 
 ## [Plan](#plan)
@@ -123,5 +123,5 @@ Our variables are sound effects for steps and music, some public floats for the 
 
 [Back to Top](#contents)
 
-## [UI](#UI)
+## [UI](#ui)
 
