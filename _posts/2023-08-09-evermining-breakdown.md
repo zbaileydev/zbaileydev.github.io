@@ -6,7 +6,7 @@ This is a breakdown of systems I designed for Evermining, a minining simulator s
 
 ## [Contents](#contents)
 - [Plan](#plan)
-- [Movement](#movement)
+- [Player Movement](#player-movement)
 - [Controller](#controller)
 - [Mining](#mining)
 - [UI](#ui)
@@ -18,7 +18,7 @@ Evermining was planned out as a 2D mining game that would follow the jam's theme
 
 Any gems will be automatically picked up if the player gets close enough to them and once they reach 20 of each type they will win the game. There is also a quit key "P" which allow the player to quit the game. 
 
-## [Movement](#movement)
+## [Player Movement](#player-movement)
 
 For the character, I wanted something squishy that was fun to move around with, so I downloaded a sprite knight from [Kenney](https://kenney.nl/assets/tiny-dungeon) and placed it into my scene. After the initial controller was set up, I worked on creating a squishing effect when the player jumped and a slight tilt towards whichever direction they were running. We'll go over the key sections of the helper script called by our main movement controller.
 
