@@ -50,7 +50,6 @@ plugins:
   - jekyll-feed
   - jekyll-soopr-seo-tag
 
-markdown: CommonMarkGhPages
-commonmark:
-  options: ["SMART", "FOOTNOTES"]
-  extensions: ["strikethrough", "autolink", "table"]
+markdown: kramdown
+kramdown:
+  parse_block_html: true
