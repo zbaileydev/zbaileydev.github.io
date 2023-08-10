@@ -36,7 +36,9 @@ For the character, I wanted something squishy that was fun to move around with, 
   Vector3 m_to = new Vector3(0.0F, 0.0F, -10.0F);
   bool hammerRotated = false;
 ```
+
 </details>
+
 Our initial variables are what you might expect; a GameObject referencing our knight, a speed for how fast to rotate it, a bool to keep track of whether we are able to rotate, Transforms of the rotations start and end location, and 2 Vector3's which represent the Z direction that the knight tilts towards.
 
 <details>
@@ -60,6 +62,7 @@ Our initial variables are what you might expect; a GameObject referencing our kn
         playerSprite.transform.localRotation = Quaternion.identity;
     }
 ```
+
 </details>
 
 In the Update() call, we check if should be rotating our character. Since this is initialized to false, ResetRotation() is called to ensure we start off with no rotation. If we are able to rotate, SquishRun is called which transforms the V3 into euler angles and passes them into a lerp between 0 and -10 on the Z axis. The sprite then bounces back and forth between these positions as the player moves.
@@ -228,6 +231,10 @@ Each frame we grab our X-axis input and translate it into movement based on how 
 
 Now that we understand how our knight runs around, it's time to dive into the actual mining system. We have 3 scripts to explore here: GemSpawner, Mining, Spawner. We will start with Spawner which is attached to rocks that spawn in the map.
 
+<details>
+  
+<summary>Spawner Class</summary>
+
 ```c#
   public string gemType = "";
   public int health = 3;
@@ -245,9 +252,16 @@ Now that we understand how our knight runs around, it's time to dive into the ac
   }
 
 ```
+
+</details>
+
 The gemType is set in the prefrab itself, we will elaborate on that later. A public health variable and corresponding gem object is available to be attached to. If at any point the health of the rock drops below 0, it will instantate gems at its location and destroy itself. There is also a function to take damage which just decrements its health.
 
 Next up is GemSpawner.
+
+<details>
+  
+<summary>GemSpawner Class</summary>
 
 ```c#
   public GameObject gem1;
@@ -282,9 +296,16 @@ Next up is GemSpawner.
       Instantiate(gemRock, spawnLocation, Quaternion.identity);
   }
 ```
+
+</details>
+
 There are 4 types of Gems that the player can mine, which is why we have 4 different game objects. "spawnCooldown" controls how long it will take until a rock is spawned into the map. If the time since a rock has spawned in passes the spawnCooldown, a random rock is chosen and spawned it somewhere in the map between -8 and 8 on the X-axis. 
 
 Finally we look at the mining component that ties these rocks to the player.
+
+<details>
+  
+<summary>Mining Initialization</summary>
 
 ```c#
   public float mineRange = 1.5f;
@@ -306,7 +327,14 @@ Finally we look at the mining component that ties these rocks to the player.
     originalColor = pickaxeOverlay.color;
   }
 ```
+
+</details>
+
 We are keeping track of variables for the range we can mine from, references to the hammer and audio, a radius to collect gems from, and other object references needed to interact with the UI such as changing the color of the mining icon when it is mining. 
+
+<details>
+  
+<summary>Mining Update Call</summary>
 
 ```
   void Update(){
@@ -331,7 +359,14 @@ We are keeping track of variables for the range we can mine from, references to 
   }
 
 ```
+
+</details>
+
 If the space key is pressed down, a Vector2 is created at the distance in front of the player + the mining range and a raycast is fired off to it. When a rock is within distance, its Spawner component will be saved and passed into the Mine() function which we will elaborate on later. Finally in the Update, a 2D circle is created around the player to identify any loose gems in their poximity and for each one found, a CollectGems function is called on it. This function is prone to collecting duplicates, so one fix is to track the object in an array and only call CollectGems if the object is not in the array. That's what I recently used in a Godot game when a resize Tween caused coins to collect twice because it triggered 2 collisions, but I will test this out when I port the game to Unreal Engine and Blueprints. 
+
+<details>
+  
+<summary>Mining interactions</summary>
 
 ```c#
   void Mine(Spawner rock)
@@ -344,6 +379,8 @@ If the space key is pressed down, a Vector2 is created at the distance in front 
     }
 
 ```
+
+</details>
 
 
 
