@@ -5,11 +5,11 @@ layout: post
 This is a breakdown of systems I designed for Evermining, a minining simulator submitted to "My First Game Jam: Summer 2022".
 
 ## [Contents](#contents)
-- [Plan](#plan)
+- [Plan](#a-hrefplanplana)
 - [Player Movement](#a-hrefplayer-movementplayer-movementa)
-- [Controller](#controller)
-- [Mining](#mining)
-- [UI](#ui)
+- [Controller](#a-hrefcontrollercontrollera)
+- [Mining](#a-hrefminingmininga)
+- [UI](#a-hrefuiuia)
 
 
 ## [Plan](#plan)
@@ -109,7 +109,7 @@ The fun part is how we handle the player turning. We just flip the player and al
 
 The final functions in our helper class rotate the mining hammer, which is called not for swinging the hammer, but for rotating the hammer when the sprite changes direction on the X axis so it is always facing the right direction. There is also a helper function to update our shouldRotate bool. 
 
-[Back to Top](#contents)
+[Back to Top](#a-hrefcontentscontentsa)
 
 ## [Controller](#controller)
 
@@ -222,7 +222,7 @@ void MoveHorizontal(){
 
 Each frame we grab our X-axis input and translate it into movement based on how long it has been since the last frame. SFX plays for the walk noise if stepSounds is false. The largest part of this function is calling functions to flip the player and the hammer they wield. If we are moving to the left, our inputX is going to be less than 0 which is what the first condition is checking for. We call FlipPlayer on the gameobject itself and the hammer, then we rotate the hammer and update the bool tracking that it has rotated. If we are not moving then the step SFX stops and we stop tilting the sprite. 
 
-[Back to Top](#contents)
+[Back to Top](#a-hrefcontentscontentsa)
 
 ## [Mining](#mining)
 
@@ -382,8 +382,8 @@ If the space key is pressed down, a Vector2 is created at the distance in front 
 
 
 
-[Back to Top](#contents)
+[Back to Top](#a-hrefcontentscontentsa)
 
 ## [UI](#ui)
 
-[Back to Top](#contents)
+[Back to Top](#a-hrefcontentscontentsa)
