@@ -6,7 +6,7 @@ This is a breakdown of systems I designed for Evermining, a minining simulator s
 
 ## [Contents](#contents)
 - [Plan](#plan)
-- [Player Movement](#player-movement)
+- [Player Movement](#a-hrefplayer-movementplayer-movementa)
 - [Controller](#controller)
 - [Mining](#mining)
 - [UI](#ui)
