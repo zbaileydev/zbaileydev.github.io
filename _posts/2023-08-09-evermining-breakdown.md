@@ -24,7 +24,7 @@ For the character, I wanted something squishy that was fun to move around with, 
 
 <details><summary>PlayerGraphics Variables</summary><p>
   
-```c#
+---c#
   public GameObject playerSprite;
   float rotSpeed = 5f;
   bool shouldRotate = false;
@@ -33,7 +33,8 @@ For the character, I wanted something squishy that was fun to move around with, 
   Vector3 m_from = new Vector3(0.0F, 0.0F, 0.0F);
   Vector3 m_to = new Vector3(0.0F, 0.0F, -10.0F);
   bool hammerRotated = false;
-```
+---
+
 </p></details>
 
 Our initial variables are what you might expect; a GameObject referencing our knight, a speed for how fast to rotate it, a bool to keep track of whether we are able to rotate, Transforms of the rotations start and end location, and 2 Vector3's which represent the Z direction that the knight tilts towards.
