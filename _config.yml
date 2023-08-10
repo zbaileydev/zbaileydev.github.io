@@ -52,4 +52,4 @@ markdown: CommonMarkGhPages
 highlighter: rouge
 commonmark:
   options: ["UNSAFE", "SMART", "FOOTNOTES"]
-  extensions: ["strikethrough", "table", "tagfilter"]
+  extensions: ["strikethrough", "autolink", "table", "tagfilter"]
