@@ -23,6 +23,7 @@ Any gems will be automatically picked up if the player gets close enough to them
 For the character, I wanted something squishy that was fun to move around with, so I downloaded a sprite knight from [Kenney](https://kenney.nl/assets/tiny-dungeon) and placed it into my scene. After the initial controller was set up, I worked on creating a squishing effect when the player jumped and a slight tilt towards whichever direction they were running. We'll go over the key sections of the helper script called by our main movement controller.
 
 <details><summary>PlayerGraphics Variables</summary>
+  
 ```c#
   public GameObject playerSprite;
   float rotSpeed = 5f;
