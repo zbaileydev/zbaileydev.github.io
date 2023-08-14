@@ -9,7 +9,6 @@ This is a breakdown of systems I designed for Evermining, a minining simulator s
 - [Player Movement](#a-hrefplayer-movementplayer-movementa)
 - [Controller](#a-hrefcontrollercontrollera)
 - [Mining](#a-hrefminingmininga)
-- [UI](#a-hrefuiuia)
 
 
 ## [Plan](#plan)
@@ -366,24 +365,69 @@ If the space key is pressed down, a Vector2 is created at the distance in front 
 <summary>Mining interactions</summary>
 
 ```c#
-  void Mine(Spawner rock)
-    {
+  void Mine(Spawner rock){
       if (rock != null){ 
           StartCoroutine(ChangeColor());
           rock.TakeDamage();
           hammerStrike.Play();
       }
     }
+  IEnumerator RevertColor(){
+        yield return new WaitForSeconds(flashTime);
+        pickaxeOverlay.color = originalColor;
+        pickaxeOverlay.rectTransform.localScale = new Vector3(1, 1, 1);
+    }
+
+  IEnumerator ChangeColor(){
+        Color tmpColor = new Color(255, 255, 0);
+        pickaxeOverlay.color = tmpColor;
+        pickaxeOverlay.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1);
+        yield return RevertColor();
+    }
+```
+
+</details>
+
+When we mine a rock, we start a coroutine to change the color and size of a UI element to display to the character that mining is occuring. We also call the TakeDamage() function of the rock and play an audio file so the player recieves feedback. 
+
+<details>
+  
+<summary>Mining interactions</summary>
+
+```c#
+  void CollectGems(Collider2D other){
+    StartCoroutine(MoveGem(other.gameObject.transform));
+  }
+
+  IEnumerator MoveGem(Transform gem){
+      float pickupSpeed = 1f;
+      float distance = Vector2.Distance(gem.position, transform.position);
+      
+      while (distance > 0.5f && gem != null){
+          float step = pickupSpeed * Time.deltaTime;
+          gem.position = Vector2.MoveTowards(gem.position, transform.position, step);
+          distance = Vector2.Distance(gem.position, transform.position);
+          yield return null;
+      }
+
+      if (gem != null){
+          string rock = gem.gameObject.name.Split("_")[1];
+          string gemName = rock.Split("(")[0]; // Removes any "Clone" stuff
+          //Debug.Log("Added a gem of type: " + gem + " to the inventory.");
+      
+          gemPickups.Play();
+          Destroy(gem.gameObject);
+          inventory.AddItem(gemName);
+          yield break;
+      }
+  }
 
 ```
 
 </details>
 
+Our CollectGems method calls a coroutine to pick up gems, which moves the gem position closer to the player and automatically picks it up. There are some modifications to the game object's name to pass it into a hashtable to know which gem we are adding, although this should have just been an attribute in the gem. A pickup sound effect is played and then the gem is added to the inventory.
 
 
-
-[Back to Top](#a-hrefcontentscontentsa)
-
-## [UI](#ui)
-
+Those are the core systems of Evermining. There are so many more I would have loved to implement but I did not have the time. 
 [Back to Top](#a-hrefcontentscontentsa)
