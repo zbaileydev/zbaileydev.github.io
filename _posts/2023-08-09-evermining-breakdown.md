@@ -430,4 +430,5 @@ Our CollectGems method calls a coroutine to pick up gems, which moves the gem po
 
 
 Those are the core systems of Evermining. There are so many more I would have loved to implement but I did not have the time. 
+
 [Back to Top](#a-hrefcontentscontentsa)
