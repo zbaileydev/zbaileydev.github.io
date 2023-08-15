@@ -2,8 +2,8 @@ title: "Zach's Blog"
 author: Zach
 url: https://puzzlezach.github.io/ # root address of the site
 description: > # description of the site (multiple lines allowed)
-  This site has a compiliation of my game development project breakdowns, with an emphasis on systems design and prototyping. The "Portfolio" sections showcase links to playable demos, while the "Blog" section contains breakdowns for each project.
-
+  Welcome to my blog! This site has a blog where I breakdown systems in various games or expand on the design that went into my projects. There is also a portfolio section showcasing specific examples that I am proud to share. If you want to get in touch, don’t hesitate to connect with me!
+  
 permalink: /:slug
 
 favicon: "./zachlogo.png" # relative path to site's favicon
@@ -28,7 +28,7 @@ theme_config:
   show_projects: true # show projects as cards, add in _data/home.yml
   show_blog: true # show blog posts added in _posts
   show_old_projects: false # show old projects as cards, add in _data/home.yml
-  show_misc_list: false # show generic vertical list for misc details, add _data/home.yml
+  show_misc_list: true # show generic vertical list for misc details, add _data/home.yml
   show_reading_time: true # show number of words and reading time in the blog posts
   show_tags: true # show tags in a blog posts
   # options for "home" page
