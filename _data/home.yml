@@ -8,6 +8,9 @@ navbar_entries:
   - title: itch
     url: https://klightgrove.itch.io
 
+  - title: let's connect
+    url: https://www.linkedin.com/in/puzzlezach
+
 project_entries:
   - title: Evermining
     url: evermining-breakdown
