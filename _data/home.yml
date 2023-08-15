@@ -20,6 +20,7 @@ project_entries:
   - title: Coming soon
     url: overview-post
     desc: More systems-based writeups coming soon.
+    highlight: WIP
 
 old_project_entries:
   - title: Soopr
