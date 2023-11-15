@@ -12,68 +12,42 @@ I had a directory of several dozen scripts which called each other. The core dev
 
 ### The Issue: Testing Imports
 
-After reading stack overflow answers and documentation, none of the code to validate successful imports was working. An example directory format is below:
-<details><summary>Project Directory</summary><p>
+After reading stack overflow answers and documentation, none of the code to validate successful imports was working. An [example project](https://github.com/PuzzleZach/ImportTesting/) can be found on my GitHub. Within Test/test_builder.py we have a script to import our API builder and return if it is successful or not.
 
-  ```
-├───component
-
-|        __init__.py
-
-│       HealthSystem.py
-
-│       SlackSystem.py
-
-│
-
-└───lib
-
-  ├───auth
-  
-  |       __init__.py
-  
-  │       auth_system.py
-  
-  │
-  
-  ├───core
-    
-  |      __init__.py
-  
-  |      core_test.py
-    
-  |      api_factory.py
-```            
-</details>
-
-Inside of core_test.py
+<details><summary>Test/test_builder.py</summary><p>
 
 ```python3
-from ..auth.auth_system import authenticate
+from ..lib.core.api_factory import api_builder
 
-def test():
-  request = authenticate()
-  if request:
-    print("Authentication works")
-
-if "__name__" == "__main__":
-  test()
-
+def test_builder():
+  endpoint = api_builder("/get-health")
+  known_body = {"days_interval": 3}
+  return endpoint.body == known_body
 ```
+            
+</details>
 
-An error appears claiming that there is no parent package.
+When we run this with `python3 test_builder.py` an error appears claiming that there is no parent package. If we go up to the parent and run a driver function, we also get an error that we are importing beyond the top level package.
 
 ### The Solution: Test at the Top
 
-When testing sibling directories or parents, Python cannot resolve the paths and will fail to find them. I moved my test cases to their own directory and wrote a driver at the very top of my project letting me reach into any folder and run them as needed. 
+When testing sibling directories or parents, Python cannot resolve the paths and will fail to find them. We have to run our code from outside of the project.
 
-An example of how I ran the tests from the root (top most level) of the project:
-
+<details><summary>ImportTesting/TestDriver.py</summary><p>
+  
 ```python3
-from tests.testauth import testauth
+from .Test.test_auth import test_auth
+from .Test.test_builder import test_builder
 
-if "__name__" == "__main__":
-  testauth()
+# Would use unittest in practice but this is faster.
+if __name__ == "__main__":
+  auth = test_auth()
+  build = test_builder()
+  print(f"The result of our auth test is {auth} and the result for our build test is {build}")
 ```
 
+</details>
+
 This was an easy problem to solve after some thought and now we have neatly organized and decoupled libraries and components to build off of in the future. Added benefits include training new developers on single components first, making onboarding easier for them and allowing them to better keep track of dependencies. 
+
+To run the example, we go to the directory above our project (in this case GitHub) and run `python3 -m ImportTesting.TestDriver` so that Python is able to resolve the imports successfully across the entire project.
