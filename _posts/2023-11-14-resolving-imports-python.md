@@ -1,7 +1,7 @@
 ---
 layout: post
 author: Zach B
-tags: [jam, breakdown]
+tags: [breakdown]
 ---
 
 This short article is on relative /  [intra-package references in Python](https://docs.python.org/3/tutorial/modules.html#intra-package-references), based on a recent undertaking at my work place and the lack of documentation for my specific use case. 
