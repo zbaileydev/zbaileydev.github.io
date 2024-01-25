@@ -47,9 +47,3 @@ sass:
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
-
-markdown: CommonMarkGhPages
-highlighter: rouge
-commonmark:
-  options: ["UNSAFE", "SMART", "FOOTNOTES"]
-  extensions: ["strikethrough", "autolink", "table", "tagfilter"]
