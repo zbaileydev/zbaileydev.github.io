@@ -43,3 +43,30 @@ IEnumerator WaitForShot()
 This gives the camera enough time for its `OnTriggerEnter` event to run and detect an enemy, allowing the player to access functions like dealing damage and gaining experience. 
 
 One notable downside is this goes through walls, so I am in the process of adding raycasting to the trigger so that Enemy objects are only assigned if they are in the open.
+
+```
+public bool CheckForWall(Transform enemyTransform)
+    {
+        RaycastHit hit;
+
+        if(Physics.Raycast(cameraCheck.position, transform.up, out hit, 30.0f))
+        {
+            if (hit.collider.gameObject.tag == "Wall")
+            {
+                float wallDistance = Vector3.Distance(cameraCheck.position, hit.point);
+                float enemyDistance = Vector3.Distance(cameraCheck.position, enemyTransform.position);
+                // Now that we have the enemy distance and wall distance, check which is closer.
+                // If the enemy is closer than the wall, this will return true.
+                return enemyDistance < wallDistance;
+            }
+        }
+        // If we do not find a wall, assume true.
+        return true;
+```
+
+This function will only run if we capture an enemy in our MeshCollider. We launch a ray from just outside our camera (a transform called `cameraCheck` handily helps us orient ourself) and check if we hit any walls. Then we compare the distance between the wall and the found enemy to see which is closer. There are edge cases where this might not work, but as long as the player centers their camera on an enemy peeking out from behind a wall they should be able to engage them reliably. 
+
+### Enemy AI
+
+For this prototype, I want to create 2 enemy types: a patroling guard and an aggressive enemy. More details coming soon!
+
