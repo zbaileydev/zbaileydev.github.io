@@ -19,3 +19,27 @@ I have started getting into photography and wanted to create a role-playing game
 ### Creating a Camera
 
 This was challenging process because I had to balance the effectiveness of various techniques for catching the area in front of the player against what I could easily implement. I decided to create a custom mesh collider that mimicked the polygon used for a camera and attached it to the camera body. That way when the player tried to trigger a photo, it could check to see if any Enemy objects were inside of it and deal damage to them.
+
+1. Create a Render Texture 
+2. Update a Target Texture of a 2nd camera to that Render Texture
+3. Set the Render Texture as the Albedo of a material
+4. Throw that material on a quad and you have a camera you can move around (security cameras, monitors, the list goes on)
+
+### Detecting Enemies
+
+The quickest way to simulate taking a photo is to turn on a mesh collider that is the same shape as the camera view. I scrapped one together in Unity using ProBuilder to make a polygon that does the job well enough to capture any enemies that are on the camera screen.
+
+In order to ensure that the player is able to detect enemies, I use a coroutine that enables the meshCollider and pauses for a second.
+
+```
+IEnumerator WaitForShot()
+{
+    meshCollider.enabled = true;
+    yield return new WaitForSeconds(1f);
+    meshCollider.enabled = false;
+}
+```
+
+This gives the camera enough time for its `OnTriggerEnter` event to run and detect an enemy, allowing the player to access functions like dealing damage and gaining experience. 
+
+One notable downside is this goes through walls, so I am in the process of adding raycasting to the trigger so that Enemy objects are only assigned if they are in the open.
