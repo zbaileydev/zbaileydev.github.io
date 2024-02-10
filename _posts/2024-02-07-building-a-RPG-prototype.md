@@ -66,7 +66,7 @@ public bool CheckForWall(Transform enemyTransform)
 
 This function will only run if we capture an enemy in our MeshCollider. We launch a ray from just outside our camera (a transform called `cameraCheck` handily helps us orient ourself) and check if we hit any walls. Then we compare the distance between the wall and the found enemy to see which is closer. There are edge cases where this might not work, but as long as the player centers their camera on an enemy peeking out from behind a wall they should be able to engage them reliably. 
 
-### Enemy AI
+### Coming Up Next
 
-For this prototype, I want to create 2 enemy types: a patroling guard and an aggressive enemy. More details coming soon!
+For this prototype, I want to create 2 enemy types: a patroling guard and an aggressive enemy. More details behind the design and implementation of these will be in a future article.
 
