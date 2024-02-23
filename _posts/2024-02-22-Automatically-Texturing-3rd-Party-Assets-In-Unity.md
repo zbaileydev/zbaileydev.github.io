@@ -42,9 +42,9 @@ For each path to a model, we convert the backslashes to forward slashes in order
 ```c#
 Material[] materials = renderer.sharedMaterials;
 for (int i = 0; i < materials.Length; i++) {
-if (materials[i].name == "Atlas") {
-materials[i] = newAtlasMaterial;   
-            }
+    if (materials[i].name == "Atlas") {
+        materials[i] = newAtlasMaterial;   
+    }
 }
 renderer.materials = materials;
 ```
