@@ -16,7 +16,7 @@ After reading stack overflow answers and documentation, none of the code to vali
 
 **Test/test_builder.py**
 
-```python3
+```python
 from ..lib.core.api_factory import api_builder
 
 def test_builder():
@@ -35,7 +35,7 @@ When testing sibling directories or parents, Python cannot resolve the paths and
 
 **ImportTesting/TestDriver.py**
   
-```python3
+```python
 from .Test.test_auth import test_auth
 from .Test.test_builder import test_builder
 
