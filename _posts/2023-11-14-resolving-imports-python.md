@@ -14,7 +14,7 @@ I had a directory of several dozen scripts which called each other. The core dev
 
 After reading stack overflow answers and documentation, none of the code to validate successful imports was working. An [example project](https://github.com/PuzzleZach/ImportTesting/) can be found on my GitHub. Within Test/test_builder.py we have a script to import our API builder and return if it is successful or not.
 
-<details><summary>Test/test_builder.py</summary><p>
+**Test/test_builder.py**
 
 ```python3
 from ..lib.core.api_factory import api_builder
@@ -25,7 +25,7 @@ def test_builder():
   return endpoint.body == known_body
 ```
             
-</details>
+
 
 When we run this with `python3 test_builder.py` an error appears claiming that there is no parent package. If we go up to the parent and run a driver function, we also get an error that we are importing beyond the top level package.
 
@@ -33,7 +33,7 @@ When we run this with `python3 test_builder.py` an error appears claiming that t
 
 When testing sibling directories or parents, Python cannot resolve the paths and will fail to find them. We have to run our code from outside of the project.
 
-<details><summary>ImportTesting/TestDriver.py</summary><p>
+**ImportTesting/TestDriver.py**
   
 ```python3
 from .Test.test_auth import test_auth
@@ -46,7 +46,6 @@ if __name__ == "__main__":
   print(f"The result of our auth test is {auth} and the result for our build test is {build}")
 ```
 
-</details>
 
 This was an easy problem to solve after some thought and now we have neatly organized and decoupled libraries and components to build off of in the future. Added benefits include training new developers on single components first, making onboarding easier for them and allowing them to better keep track of dependencies. 
 
