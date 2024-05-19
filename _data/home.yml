@@ -9,46 +9,14 @@ navbar_entries:
     url: https://puzzlezach.itch.io/
 
   - title: let's connect on linkedin
-    url: https://www.linkedin.com/in/puzzlezach
-
-project_entries:
-  - title: Evermining
-    url: evermining-breakdown
-    desc: A gamejam submission with a focus on player movement and loot pickup.
-
-  - title: Mayor
-    url: brackeys-game-jam
-    desc: A basic narrative adventure in under 100 lines of code.
-
-  - title: Coming soon
-    url: overview-post
-    desc: More systems-based writeups coming soon.
-    highlight: WIP
-
-old_project_entries:
-  - title: Soopr
-    url: https://www.soopr.co
-    desc: Delight your readers - add beautiful share and like buttons easily to your websites 
-    highlight: NEW
-
-  - title: Cookie
-    url: https://github.com/abhinavs/cookie
-    desc: An open source landing website with supporting pages and integrated blog
-
-  - title: Moonwalk
-    url: https://github.com/abhinavs/moonwalk
-    desc: A fast and minimalist Jekyll blog theme with clean dark mode
-
-  - title: Humangous
-    url: https://www.humangous.co
-    desc: The better people know you, the better they collaborate
+    url: https://www.linkedin.com/in/zbaileydev
 
 footer_entries:
   - title: twitter
-    url: https://twitter.com/
+    url: https://twitter.com/puzzlezach1
 
   - title: github
-    url: https://github.com/puzzlezach
+    url: https://github.com/zbaileydev
 
   - title: feed
     url: feed.xml
