@@ -5,16 +5,10 @@ navbar_entries:
   - title: blog
     url: blog
 
-  - title: itch
-    url: https://puzzlezach.itch.io/
-
   - title: let's connect on linkedin
     url: https://www.linkedin.com/in/zbaileydev
 
 footer_entries:
-  - title: twitter
-    url: https://twitter.com/puzzlezach1
-
   - title: github
     url: https://github.com/zbaileydev
 
